@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MBS Restaurants — Setup Guide</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif; background: #F8F8F8; color: #1A1A1A; -webkit-font-smoothing: antialiased; }
+    .page { max-width: 820px; margin: 0 auto; padding: 48px 32px 80px; }
+    .header { background: #111; color: #fff; border-radius: 12px; padding: 36px 40px; margin-bottom: 40px; }
+    .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+    .header p { color: rgba(255,255,255,0.6); font-size: 15px; line-height: 1.6; }
+    .header .badge { display: inline-block; background: #F0B429; color: #111; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; margin-bottom: 14px; }
+    .print-btn { background: #F0B429; color: #111; border: none; padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+    .print-btn:hover { opacity: 0.88; }
+    .section { background: #fff; border-radius: 10px; border: 1px solid #E8E8E8; margin-bottom: 24px; overflow: hidden; }
+    .section-header { background: #F5F5F5; padding: 16px 24px; border-bottom: 1px solid #E8E8E8; display: flex; align-items: center; gap: 12px; }
+    .section-num { background: #111; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+    .section-header h2 { font-size: 16px; font-weight: 700; }
+    .section-header .est { margin-left: auto; font-size: 12px; color: #999; }
+    .section-body { padding: 24px; }
+    .step { display: flex; gap: 16px; margin-bottom: 20px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { background: #E8E8E8; color: #555; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .step-body h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .step-body p { font-size: 14px; color: #555; line-height: 1.6; }
+    .step-body p + p { margin-top: 6px; }
+    code { background: #F0F0F0; border: 1px solid #E0E0E0; border-radius: 4px; padding: 2px 6px; font-size: 13px; font-family: 'Courier New', monospace; color: #C45C26; }
+    pre { background: #1A1A1A; color: #E8E8E8; border-radius: 8px; padding: 16px 20px; font-size: 13px; font-family: 'Courier New', monospace; line-height: 1.6; margin: 10px 0; overflow-x: auto; }
+    pre .comment { color: #666; }
+    .note { background: #FFF8E8; border: 1px solid #F0D070; border-radius: 6px; padding: 12px 16px; font-size: 13px; color: #7A5000; margin-top: 12px; line-height: 1.6; }
+    .done { background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 6px; padding: 12px 16px; font-size: 13px; color: #166534; margin-top: 12px; line-height: 1.6; }
+    .checklist { list-style: none; margin-top: 16px; }
+    .checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #444; padding: 8px 0; border-bottom: 1px solid #F0F0F0; line-height: 1.5; }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before { content: '☐'; font-size: 16px; line-height: 1; flex-shrink: 0; color: #AAA; margin-top: 1px; }
+    .summary { background: #111; color: #fff; border-radius: 10px; padding: 28px; margin-top: 32px; }
+    .summary h2 { font-size: 18px; margin-bottom: 16px; color: #F0B429; }
+    .summary ul { list-style: none; }
+    .summary ul li { font-size: 14px; color: rgba(255,255,255,0.75); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08); line-height: 1.5; }
+    .summary ul li:last-child { border-bottom: none; }
+    .summary ul li strong { color: #fff; }
+    @media print {
+      body { background: white; }
+      .print-btn { display: none; }
+      .page { padding: 20px; }
+      .section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <span class="badge">Setup Guide</span>
+    <h1>MBS Restaurants — Deployment Checklist</h1>
+    <p>Follow these steps in order to deploy mbsrestaurants.com. Estimated total time: 20–30 minutes.</p>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Create GitHub Repository</h2>
+      <span class="est">~3 min</span>
+    </div>
+    <div class="section-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Go to github.com → New repository</h3>
+          <p>Name it: <code>mbsrestaurants-website</code></p>
+          <p>Set to <strong>Public</strong> (required for Cloudflare Pages free tier). Click <strong>Create repository</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Initialize and push from your terminal</h3>
+          <pre>cd ~/Sites/mbsrestaurants-website
+git init
+git add .
+git commit -m "Initial build — MBS Restaurants demo site"
+git remote add origin https://github.com/YOUR_USERNAME/mbsrestaurants-website.git
+git push -u origin main</pre>
+          <p>Replace <code>YOUR_USERNAME</code> with your GitHub username (likely <code>elmarcial</code> based on your other repos).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Create Cloudflare Pages Project</h2>
+      <span class="est">~5 min</span>
+    </div>
+    <div class="section-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Log in to Cloudflare Dashboard</h3>
+          <p>Go to <strong>dash.cloudflare.com</strong> → click <strong>Workers &amp; Pages</strong> in the left sidebar.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Create a new Pages project</h3>
+          <p>Click <strong>Create application</strong> → <strong>Pages</strong> tab → <strong>Connect to Git</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Select your repository</h3>
+          <p>Choose <code>mbsrestaurants-website</code> from the list. If it doesn't appear, click <strong>Add account</strong> and grant Cloudflare access to your GitHub.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Configure build settings</h3>
+          <p><strong>Project name:</strong> <code>mbsrestaurants-website</code></p>
+          <p><strong>Production branch:</strong> <code>main</code></p>
+          <p><strong>Build command:</strong> (leave blank)</p>
+          <p><strong>Build output directory:</strong> (leave blank or <code>/</code>)</p>
+          <p>Click <strong>Save and Deploy</strong>. Your site will be live at a <code>.pages.dev</code> URL in about 60 seconds.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Add your custom domain</h3>
+          <p>Once deployed, go to your Pages project → <strong>Custom domains</strong> tab → <strong>Set up a custom domain</strong>.</p>
+          <p>Enter <code>mbsrestaurants.com</code> and click <strong>Continue</strong>.</p>
+          <p>Since your domain is already on Cloudflare, it will auto-configure the DNS. Click <strong>Activate domain</strong>.</p>
+          <div class="done">✅ mbsrestaurants.com will go live within a few minutes after this step.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Deploy the Cloudflare Worker (Email API)</h2>
+      <span class="est">~3 min</span>
+    </div>
+    <div class="section-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Open your terminal and navigate to the project</h3>
+          <pre>cd ~/Sites/mbsrestaurants-website</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Deploy the Worker</h3>
+          <pre>wrangler deploy</pre>
+          <p>This creates a Worker named <code>mbs-restaurants-api</code>. It will be available at:</p>
+          <pre>https://mbs-restaurants-api.jasonmarcial95.workers.dev</pre>
+          <div class="note">⚠️ If wrangler says "Authentication required", run <code>wrangler login</code> first and follow the browser prompt.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Set the Resend API Key Secret</h2>
+      <span class="est">~2 min</span>
+    </div>
+    <div class="section-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Run the secret command</h3>
+          <pre>wrangler secret put RESEND_API_KEY</pre>
+          <p>Wrangler will prompt you: <strong>Enter a secret value:</strong></p>
+          <p>Paste your Resend API key (from the Resend dashboard → API Keys) and press Enter.</p>
+          <div class="note">⚠️ Never paste your API key directly into the wrangler.toml file. Using <code>wrangler secret put</code> keeps it encrypted and out of Git.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>Verify mbsrestaurants.com in Resend</h2>
+      <span class="est">~5–10 min</span>
+    </div>
+    <div class="section-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Open Resend dashboard</h3>
+          <p>Go to <strong>resend.com/domains</strong> → click <strong>Add Domain</strong>.</p>
+          <p>Enter: <code>mbsrestaurants.com</code> and click <strong>Add</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Add DNS records in Cloudflare</h3>
+          <p>Resend will show you 3–4 DNS records to add. Go to <strong>dash.cloudflare.com</strong> → <strong>mbsrestaurants.com</strong> → <strong>DNS</strong> → <strong>Records</strong>.</p>
+          <p>Add each record exactly as Resend shows. Typically:</p>
+          <ul style="margin-top:8px;padding-left:20px;font-size:14px;color:#555;line-height:2;">
+            <li>1× <strong>TXT</strong> record (SPF)</li>
+            <li>1× <strong>TXT</strong> record (DKIM)</li>
+            <li>1× <strong>CNAME</strong> record (DKIM)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Verify in Resend</h3>
+          <p>Click <strong>Verify Domain</strong> in the Resend dashboard. DNS propagation is usually instant on Cloudflare. If it fails, wait 2 minutes and try again.</p>
+          <div class="done">✅ Once verified, emails will send from <code>orders@mbsrestaurants.com</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Test the Full Flow</h2>
+      <span class="est">~5 min</span>
+    </div>
+    <div class="section-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Open one of the demo pages</h3>
+          <p>Visit <code>mbsrestaurants.com/demo-mexican.html</code> (or the <code>.pages.dev</code> URL before the custom domain is live).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Add items and go to checkout</h3>
+          <p>Add a few items to the cart. Click the cart icon → Proceed to Checkout.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Fill out the form with your real email</h3>
+          <p>Use your own email (<code>jasonm@mbsandcompany.com</code>) to confirm the email arrives. Use any fake values for the other fields (name, card, address).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Click Place Order and check your inbox</h3>
+          <p>You should receive a nicely formatted order confirmation email within 30 seconds. If it ends up in spam, mark it as "Not Spam" — this trains the filters.</p>
+          <div class="done">✅ If the email arrives, everything is working. The site is live.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Future Deploys (Ongoing)</h2>
+      <span class="est">1 min per deploy</span>
+    </div>
+    <div class="section-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>For HTML/content changes (Pages)</h3>
+          <pre>cd ~/Sites/mbsrestaurants-website
+git add .
+git commit -m "your message"
+git push</pre>
+          <p>Cloudflare Pages auto-deploys within 60 seconds of every push.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>For Worker (API) changes only</h3>
+          <pre>cd ~/Sites/mbsrestaurants-website
+wrangler deploy</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary">
+    <h2>Quick Reference</h2>
+    <ul>
+      <li><strong>Live site:</strong> https://mbsrestaurants.com</li>
+      <li><strong>Pages dashboard:</strong> dash.cloudflare.com → Workers &amp; Pages → mbsrestaurants-website</li>
+      <li><strong>Worker URL:</strong> https://mbs-restaurants-api.jasonmarcial95.workers.dev</li>
+      <li><strong>Sending email:</strong> orders@mbsrestaurants.com</li>
+      <li><strong>CC on every order:</strong> jasonm@mbsandcompany.com</li>
+      <li><strong>Resend domain to verify:</strong> mbsrestaurants.com</li>
+      <li><strong>Worker secret:</strong> RESEND_API_KEY (set via <code>wrangler secret put</code>)</li>
+    </ul>
+  </div>
+
+  <!-- Final Checklist -->
+  <div class="section" style="margin-top:28px;">
+    <div class="section-header">
+      <div class="section-num">✓</div>
+      <h2>Master Checklist — Print and Check Off</h2>
+    </div>
+    <div class="section-body">
+      <ul class="checklist">
+        <li>GitHub repo <code>mbsrestaurants-website</code> created and pushed</li>
+        <li>Cloudflare Pages project created and connected to GitHub repo</li>
+        <li>Custom domain <code>mbsrestaurants.com</code> added to Pages project</li>
+        <li>Worker deployed with <code>wrangler deploy</code></li>
+        <li>Resend API key set with <code>wrangler secret put RESEND_API_KEY</code></li>
+        <li>Domain <code>mbsrestaurants.com</code> verified in Resend dashboard</li>
+        <li>DNS records (SPF, DKIM) added in Cloudflare for Resend</li>
+        <li>Test order placed — email received in inbox</li>
+        <li>Site live at <code>mbsrestaurants.com</code></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
