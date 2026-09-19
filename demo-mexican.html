@@ -434,6 +434,16 @@
     var TAX_RATE = 0.06625;
     var API_URL = 'https://mbs-restaurants-api.jasonmarcial95.workers.dev';
 
+    /* ── Menu rendering ── */
+    var ITEM_COLORS = {
+      appetizers: 'background:linear-gradient(135deg,#FFF0E0,#FFD9A0)',
+      tacos: 'background:linear-gradient(135deg,#FFE8D0,#FFC890)',
+      burritos: 'background:linear-gradient(135deg,#FFE0CC,#FFB07A)',
+      mains: 'background:linear-gradient(135deg,#FFDCC0,#FFA060)',
+      drinks: 'background:linear-gradient(135deg,#E8F4FF,#B0D8FF)',
+      desserts: 'background:linear-gradient(135deg,#FFF0E8,#FFCCA0)',
+    };
+
     /* ── i18n ── */
     function t(key) { return LANG[currentLang][key] || key; }
     function setLang(lang) {
@@ -456,16 +466,6 @@
     document.getElementById('lang-toggle').addEventListener('click', function() {
       setLang(currentLang === 'en' ? 'es' : 'en');
     });
-
-    /* ── Menu rendering ── */
-    var ITEM_COLORS = {
-      appetizers: 'background:linear-gradient(135deg,#FFF0E0,#FFD9A0)',
-      tacos: 'background:linear-gradient(135deg,#FFE8D0,#FFC890)',
-      burritos: 'background:linear-gradient(135deg,#FFE0CC,#FFB07A)',
-      mains: 'background:linear-gradient(135deg,#FFDCC0,#FFA060)',
-      drinks: 'background:linear-gradient(135deg,#E8F4FF,#B0D8FF)',
-      desserts: 'background:linear-gradient(135deg,#FFF0E8,#FFCCA0)',
-    };
 
     function renderAllMenus() {
       Object.keys(MENU).forEach(function(cat) {
