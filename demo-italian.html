@@ -137,6 +137,25 @@
     .success-back { background: var(--pri); color: #fff; border: none; border-radius: 8px; padding: 12px 28px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); margin-top: 8px; transition: background 0.15s; }
     .success-back:hover { background: var(--pri-l); }
 
+    .addr-wrap { position: relative; }
+    .addr-suggestions { position: absolute; left: 0; right: 0; top: calc(100% + 2px); background: #fff; border: 1.5px solid var(--border); border-radius: 8px; z-index: 50; box-shadow: 0 4px 16px rgba(0,0,0,0.1); overflow: hidden; display: none; }
+    .addr-suggestions.open { display: block; }
+    .addr-suggestion { padding: 10px 14px; font-size: 0.82rem; cursor: pointer; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.1s; line-height: 1.4; }
+    .addr-suggestion:last-child { border-bottom: none; }
+    .addr-suggestion:hover { background: var(--bg2); }
+    .addr-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .state-select { border: 1.5px solid var(--border); border-radius: 7px; padding: 10px 10px; font-size: 0.85rem; font-family: var(--font); color: var(--text-muted); background: var(--bg2); width: 100%; cursor: pointer; }
+    .state-select:focus { outline: none; border-color: var(--pri); }
+    .pay-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+    .pay-option { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: border-color 0.15s, background 0.15s; user-select: none; }
+    .pay-option:hover { border-color: var(--pri); }
+    .pay-option input[type="radio"] { display: none; }
+    .pay-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; transition: border-color 0.15s, background 0.15s; position: relative; }
+    .pay-option input[type="radio"]:checked ~ .pay-radio { border-color: var(--pri); background: var(--pri); }
+    .pay-option input[type="radio"]:checked ~ .pay-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+    .pay-option.selected { border-color: var(--pri); background: var(--gold-l); }
+    .pay-label { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+
     @media (max-width: 640px) {
       header { padding: 0 16px; }
       main { padding: 28px 16px; }
@@ -144,6 +163,8 @@
       .cart-panel { width: 100vw; }
       .co-overlay { align-items: flex-end; padding: 0; }
       .co-modal { border-radius: 12px 12px 0 0; max-height: 95vh; }
+      .addr-row { grid-template-columns: 1fr 1fr; }
+      .addr-row .form-group:first-child { grid-column: 1 / -1; }
     }
   </style>
 </head>
@@ -253,13 +274,30 @@
           <input type="email" id="f-email" autocomplete="email" />
           <span class="fake-note" data-i18n="f_email_note">* You will receive a real demo confirmation email here</span>
         </div>
-        <div class="form-group"><label data-i18n="f_address">Delivery Address</label><input type="text" id="f-address" class="fake" placeholder="123 Any Street, City, NJ" /></div>
-        <p class="co-section-title" style="margin-top:20px;" data-i18n="co_payment_lbl">Payment (Demo — any values work)</p>
-        <div class="form-group"><label data-i18n="f_card">Card Number</label><input type="text" id="f-card" class="fake" placeholder="4111 1111 1111 1111" maxlength="19" /></div>
-        <div class="cc-row">
-          <div class="form-group"><label data-i18n="f_expiry">Expiry</label><input type="text" id="f-expiry" class="fake" placeholder="MM/YY" maxlength="5" /></div>
-          <div class="form-group"><label>CVV</label><input type="text" id="f-cvv" class="fake" placeholder="123" maxlength="4" /></div>
+        <p class="co-section-title" style="margin-top:20px;" data-i18n="co_address_lbl">Delivery Address</p>
+        <div class="form-group addr-wrap">
+          <label data-i18n="f_street">Street Address</label>
+          <input type="text" id="f-street" class="fake" placeholder="123 Main Street" autocomplete="off" />
+          <div class="addr-suggestions" id="addr-suggestions"></div>
+        </div>
+        <div class="addr-row">
+          <div class="form-group"><label data-i18n="f_city">City</label><input type="text" id="f-city" class="fake" placeholder="Cherry Hill" /></div>
+          <div class="form-group"><label data-i18n="f_state">State</label><select id="f-state" class="state-select fake"><option value="">—</option><option value="AL">AL — Alabama</option><option value="AK">AK — Alaska</option><option value="AZ">AZ — Arizona</option><option value="AR">AR — Arkansas</option><option value="CA">CA — California</option><option value="CO">CO — Colorado</option><option value="CT">CT — Connecticut</option><option value="DE">DE — Delaware</option><option value="FL">FL — Florida</option><option value="GA">GA — Georgia</option><option value="HI">HI — Hawaii</option><option value="ID">ID — Idaho</option><option value="IL">IL — Illinois</option><option value="IN">IN — Indiana</option><option value="IA">IA — Iowa</option><option value="KS">KS — Kansas</option><option value="KY">KY — Kentucky</option><option value="LA">LA — Louisiana</option><option value="ME">ME — Maine</option><option value="MD">MD — Maryland</option><option value="MA">MA — Massachusetts</option><option value="MI">MI — Michigan</option><option value="MN">MN — Minnesota</option><option value="MS">MS — Mississippi</option><option value="MO">MO — Missouri</option><option value="MT">MT — Montana</option><option value="NE">NE — Nebraska</option><option value="NV">NV — Nevada</option><option value="NH">NH — New Hampshire</option><option value="NJ">NJ — New Jersey</option><option value="NM">NM — New Mexico</option><option value="NY">NY — New York</option><option value="NC">NC — North Carolina</option><option value="ND">ND — North Dakota</option><option value="OH">OH — Ohio</option><option value="OK">OK — Oklahoma</option><option value="OR">OR — Oregon</option><option value="PA">PA — Pennsylvania</option><option value="RI">RI — Rhode Island</option><option value="SC">SC — South Carolina</option><option value="SD">SD — South Dakota</option><option value="TN">TN — Tennessee</option><option value="TX">TX — Texas</option><option value="UT">UT — Utah</option><option value="VT">VT — Vermont</option><option value="VA">VA — Virginia</option><option value="WA">WA — Washington</option><option value="WV">WV — West Virginia</option><option value="WI">WI — Wisconsin</option><option value="WY">WY — Wyoming</option><option value="DC">DC — Washington D.C.</option></select></div>
           <div class="form-group"><label data-i18n="f_zip">ZIP</label><input type="text" id="f-zip" class="fake" placeholder="08002" maxlength="5" /></div>
+        </div>
+        <p class="co-section-title" style="margin-top:20px;" data-i18n="co_payment_lbl">Payment Method</p>
+        <div class="pay-options">
+          <label class="pay-option"><input type="radio" name="pay-method" value="apple" /><span class="pay-radio"></span><span class="pay-label">🍎 Apple Pay</span></label>
+          <label class="pay-option"><input type="radio" name="pay-method" value="paypal" /><span class="pay-radio"></span><span class="pay-label">🅿️ PayPal</span></label>
+          <label class="pay-option"><input type="radio" name="pay-method" value="card" /><span class="pay-radio"></span><span class="pay-label" data-i18n="pay_card">💳 Debit / Credit Card</span></label>
+        </div>
+        <div id="cc-fields" style="display:none;margin-top:14px;">
+          <div class="form-group"><label data-i18n="f_name_card">Name on Card</label><input type="text" id="f-name-card" class="fake" /></div>
+          <div class="form-group"><label data-i18n="f_card">Card Number</label><input type="text" id="f-card" class="fake" placeholder="4111 1111 1111 1111" maxlength="19" /></div>
+          <div class="form-row">
+            <div class="form-group"><label data-i18n="f_expiry">Expiry</label><input type="text" id="f-expiry" class="fake" placeholder="MM/YY" maxlength="5" /></div>
+            <div class="form-group"><label>CVV</label><input type="text" id="f-cvv" class="fake" placeholder="123" maxlength="4" /></div>
+          </div>
         </div>
         <div class="tc-row">
           <input type="checkbox" id="tc-check" />
@@ -334,15 +372,15 @@
         cart_empty:'Your cart is empty.\nAdd something delicious!',
         subtotal_lbl:'Subtotal', delivery_lbl:'Delivery', tax_lbl:'Tax (6.625%)', total_lbl:'Total',
         checkout_btn:'Proceed to Checkout →', co_title:'Checkout', co_order_lbl:'Your Order',
-        co_contact_lbl:'Contact Information', co_payment_lbl:'Payment (Demo — any values work)',
+        co_contact_lbl:'Contact Information', co_address_lbl:'Delivery Address', co_payment_lbl:'Payment Method',
         f_name:'Full Name', f_phone:'Phone', f_email:'Email', f_email_note:'* You will receive a real demo confirmation email here',
-        f_address:'Delivery Address', f_card:'Card Number', f_expiry:'Expiry', f_zip:'ZIP',
+        f_street:'Street Address', f_city:'City', f_state:'State', f_zip:'ZIP', pay_card:'💳 Debit / Credit Card', f_name_card:'Name on Card', f_card:'Card Number', f_expiry:'Expiry',
         tc_text:'I understand this is a <strong>demo site</strong> — no food will be delivered and no payment will be charged. My email will receive a demo confirmation. I agree to the <a href="#" onclick="showTerms();return false;">Demo Terms</a>.',
         place_btn:'Place Order →', success_h:'Order Placed!',
         success_p1:'Check your inbox — a demo order confirmation is on its way to you.',
         success_note:'This is a demo. No food will be prepared or delivered. This is what your real customers would see after ordering from your restaurant\'s website.',
         success_back:'Back to Menu', err_fields:'Please fill in your name and a valid email address.',
-        err_tc:'Please accept the demo terms to continue.', err_server:'Something went wrong. Please try again.', placing:'Placing order…',
+        err_tc:'Please accept the demo terms to continue.', err_server:'Something went wrong. Please try again.', placing:'Placing order…', err_payment:'Please select a payment method.',
       },
       es: {
         banner_text:'Demo de MBS Restaurants — Sin pedidos reales · Desarrollado por', banner_link:'MBS & Company',
@@ -355,15 +393,15 @@
         cart_empty:'Tu carrito está vacío.\n¡Agrega algo delicioso!',
         subtotal_lbl:'Subtotal', delivery_lbl:'Envío', tax_lbl:'Impuesto (6.625%)', total_lbl:'Total',
         checkout_btn:'Ir al Pago →', co_title:'Pago', co_order_lbl:'Tu Pedido',
-        co_contact_lbl:'Información de Contacto', co_payment_lbl:'Pago (Demo — cualquier valor funciona)',
+        co_contact_lbl:'Información de Contacto', co_address_lbl:'Dirección de Entrega', co_payment_lbl:'Método de Pago',
         f_name:'Nombre Completo', f_phone:'Teléfono', f_email:'Correo', f_email_note:'* Recibirás un correo de confirmación demo aquí',
-        f_address:'Dirección de Entrega', f_card:'Número de Tarjeta', f_expiry:'Vencimiento', f_zip:'Código Postal',
+        f_street:'Calle y Número', f_city:'Ciudad', f_state:'Estado', f_zip:'Código Postal', pay_card:'💳 Tarjeta de Débito / Crédito', f_name_card:'Nombre en la Tarjeta', f_card:'Número de Tarjeta', f_expiry:'Vencimiento',
         tc_text:'Entiendo que este es un <strong>sitio demo</strong> — no se entregará comida ni se cobrará ningún pago. Mi correo recibirá una confirmación demo. Acepto los <a href="#" onclick="showTerms();return false;">Términos del Demo</a>.',
         place_btn:'Realizar Pedido →', success_h:'¡Pedido Realizado!',
         success_p1:'Revisa tu bandeja de entrada — un correo de confirmación demo está en camino.',
         success_note:'Esto es un demo. No se preparará ni entregará ningún alimento. Esto es lo que verían tus clientes reales.',
         success_back:'Volver al Menú', err_fields:'Por favor ingresa tu nombre y un correo válido.',
-        err_tc:'Por favor acepta los términos del demo para continuar.', err_server:'Algo salió mal. Inténtalo de nuevo.', placing:'Procesando pedido…',
+        err_tc:'Por favor acepta los términos del demo para continuar.', err_server:'Algo salió mal. Inténtalo de nuevo.', placing:'Procesando pedido…', err_payment:'Por favor selecciona un método de pago.',
       }
     };
 
@@ -465,9 +503,11 @@
     function closeCheckout() { document.getElementById('co-overlay').classList.remove('open'); document.body.style.overflow=''; }
     async function placeOrder() {
       var name=document.getElementById('f-name').value.trim(), email=document.getElementById('f-email').value.trim(), tc=document.getElementById('tc-check').checked;
+      var payMethod=document.querySelector('input[name="pay-method"]:checked');
       var errEl=document.getElementById('co-error'), btn=document.getElementById('place-btn');
       errEl.style.display='none';
       if(!name||!email||!email.includes('@')){ errEl.textContent=t('err_fields'); errEl.style.display='block'; return; }
+      if(!payMethod){ errEl.textContent=t('err_payment'); errEl.style.display='block'; return; }
       if(!tc){ errEl.textContent=t('err_tc'); errEl.style.display='block'; return; }
       btn.disabled=true; btn.textContent=t('placing');
       var sub=getSubtotal(), tax=getTax(sub), total=getTotal(sub);
@@ -505,6 +545,55 @@
       if (v.length <= 3) e.target.value = '(' + v;
       else if (v.length <= 6) e.target.value = '(' + v.substring(0,3) + ') ' + v.substring(3);
       else e.target.value = '(' + v.substring(0,3) + ') ' + v.substring(3,6) + '-' + v.substring(6);
+    });
+
+    document.getElementById('f-zip').addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5);
+    });
+
+    var STATE_MAP = {'Alabama':'AL','Alaska':'AK','Arizona':'AZ','Arkansas':'AR','California':'CA','Colorado':'CO','Connecticut':'CT','Delaware':'DE','Florida':'FL','Georgia':'GA','Hawaii':'HI','Idaho':'ID','Illinois':'IL','Indiana':'IN','Iowa':'IA','Kansas':'KS','Kentucky':'KY','Louisiana':'LA','Maine':'ME','Maryland':'MD','Massachusetts':'MA','Michigan':'MI','Minnesota':'MN','Mississippi':'MS','Missouri':'MO','Montana':'MT','Nebraska':'NE','Nevada':'NV','New Hampshire':'NH','New Jersey':'NJ','New Mexico':'NM','New York':'NY','North Carolina':'NC','North Dakota':'ND','Ohio':'OH','Oklahoma':'OK','Oregon':'OR','Pennsylvania':'PA','Rhode Island':'RI','South Carolina':'SC','South Dakota':'SD','Tennessee':'TN','Texas':'TX','Utah':'UT','Vermont':'VT','Virginia':'VA','Washington':'WA','West Virginia':'WV','Wisconsin':'WI','Wyoming':'WY','District of Columbia':'DC'};
+    var addrBox = document.getElementById('addr-suggestions');
+    var addrTimer;
+    document.getElementById('f-street').addEventListener('input', function() {
+      clearTimeout(addrTimer);
+      var q = this.value.trim();
+      addrBox.innerHTML = ''; addrBox.classList.remove('open');
+      if (q.length < 4) return;
+      addrTimer = setTimeout(function() {
+        fetch('https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(q) + '&format=json&limit=5&countrycodes=us&addressdetails=1')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (!data.length) return;
+            addrBox.innerHTML = '';
+            data.forEach(function(item) {
+              var div = document.createElement('div');
+              div.className = 'addr-suggestion';
+              div.textContent = item.display_name;
+              div.addEventListener('click', function() {
+                var a = item.address || {};
+                document.getElementById('f-street').value = [a.house_number, a.road].filter(Boolean).join(' ');
+                document.getElementById('f-city').value = a.city || a.town || a.village || a.municipality || '';
+                document.getElementById('f-state').value = STATE_MAP[a.state] || '';
+                document.getElementById('f-zip').value = (a.postcode || '').substring(0, 5);
+                addrBox.innerHTML = ''; addrBox.classList.remove('open');
+              });
+              addrBox.appendChild(div);
+            });
+            addrBox.classList.add('open');
+          })
+          .catch(function() {});
+      }, 350);
+    });
+    document.getElementById('f-street').addEventListener('blur', function() {
+      setTimeout(function() { addrBox.innerHTML = ''; addrBox.classList.remove('open'); }, 200);
+    });
+
+    document.querySelectorAll('input[name="pay-method"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        document.querySelectorAll('.pay-option').forEach(function(o) { o.classList.remove('selected'); });
+        this.closest('.pay-option').classList.add('selected');
+        document.getElementById('cc-fields').style.display = this.value === 'card' ? 'block' : 'none';
+      });
     });
   </script>
 </body>
